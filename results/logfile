@@ -1,0 +1,100 @@
+INFO:TUNING MODELS...
+INFO:TUNING MODELS...
+INFO:LogisticRegression() best score: 0.767123369037443
+INFO:TUNING MODELS...
+INFO:LogisticRegression() best score: 0.767123369037443
+INFO:EVALUATION: 
+
+INFO:log_reg: 
+
+INFO:EVALUATION: 
+
+INFO:log_reg: 
+
+INFO:Accuracy: 0.769602560334411
+INFO:Precision: 0.3896420249947045
+INFO:Recall: 0.7400925367129351
+INFO:Confusion matrix: [[19887  5763]
+ [ 1292  3679]]
+INFO:Classification report:               precision    recall  f1-score   support
+
+           0       0.94      0.78      0.85     25650
+           1       0.39      0.74      0.51      4971
+
+    accuracy                           0.77     30621
+   macro avg       0.66      0.76      0.68     30621
+weighted avg       0.85      0.77      0.79     30621
+
+INFO:F1 score: 0.5105113439256227
+INFO:RIC AUC score: 0.8344490912791265
+INFO:TUNING MODELS...
+INFO:KNeighborsClassifier() best score: 0.8935070500866947
+INFO:EVALUATION: 
+
+INFO:knn: 
+
+INFO:Accuracy: 0.7687534698409588
+INFO:Precision: 0.36749560411956794
+INFO:Recall: 0.5886139609736472
+INFO:Confusion matrix: [[20614  5036]
+ [ 2045  2926]]
+INFO:Classification report:               precision    recall  f1-score   support
+
+           0       0.91      0.80      0.85     25650
+           1       0.37      0.59      0.45      4971
+
+    accuracy                           0.77     30621
+   macro avg       0.64      0.70      0.65     30621
+weighted avg       0.82      0.77      0.79     30621
+
+INFO:F1 score: 0.4524858888115673
+INFO:RIC AUC score: 0.7616806091314028
+INFO:TUNING MODELS...
+INFO:TUNING MODELS...
+INFO:TUNING MODELS...
+INFO:TUNING MODELS...
+INFO:RandomForestClassifier() best score: 0.9195776001659798
+INFO:EVALUATION: 
+
+INFO:random_forest: 
+
+INFO:Accuracy: 0.863329087880866
+INFO:Precision: 0.5823554065381391
+INFO:Recall: 0.5590424461878898
+INFO:Confusion matrix: [[23657  1993]
+ [ 2192  2779]]
+INFO:Classification report:               precision    recall  f1-score   support
+
+           0       0.92      0.92      0.92     25650
+           1       0.58      0.56      0.57      4971
+
+    accuracy                           0.86     30621
+   macro avg       0.75      0.74      0.74     30621
+weighted avg       0.86      0.86      0.86     30621
+
+INFO:F1 score: 0.5704608436826439
+INFO:RIC AUC score: 0.8665550838136045
+INFO:TUNING MODELS...
+INFO:TUNING MODELS...
+INFO:LogisticRegression() best score: 0.7670815630173762
+INFO:EVALUATION: 
+
+INFO:log_reg: 
+
+INFO:Accuracy: 0.7694392737010548
+INFO:Precision: 0.3894123875066173
+INFO:Recall: 0.7398913699456849
+INFO:Confusion matrix: [[19883  5767]
+ [ 1293  3678]]
+INFO:Classification report:               precision    recall  f1-score   support
+
+           0       0.94      0.78      0.85     25650
+           1       0.39      0.74      0.51      4971
+
+    accuracy                           0.77     30621
+   macro avg       0.66      0.76      0.68     30621
+weighted avg       0.85      0.77      0.79     30621
+
+INFO:F1 score: 0.5102663706992231
+INFO:RIC AUC score: 0.8344757252885447
+INFO:TUNING MODELS...
