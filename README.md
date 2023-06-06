@@ -12,14 +12,14 @@ Preparation of the dataset includes:
 - deletion of rows that are less than **50%** filled;
 - deleting columns that are correlated with other columns by a factor greater than a certain fraction (the **"korelation_limit"** parameter in the **"config.yaml"** file). Moreover, those columns that have more data outliers in the quantile **<0.05 and >0.95** are removed from the correlated pair of columns;
 - deletion of rows that fall into certain outliers (parameter **"tail_len"** in the file **"config.yaml"**");
-- replacing categorical data gaps with a mode;
+- replacing categorical data gaps with a **mode**;
 - replacement of continuous data outliers with **monthly averages**;
 - scaling continuous data using **StandardScaler**;
 - categorical data encoding using **OrdinalEncoder**.
 
 All the parameters in the configuration file **"config.yaml"** are specified by lists, according to which the iterations of data set preparation take place.
 
-The quality of data preparation is evaluated by training the processed dataset on a Logistic Regression model (without Cost-function balancing), which gives a special metric of the data-based error matrix: **norma = accuracy x TP/FN** multiplied by the number of rows of the processed dataset (**len_df**). 
+The quality of data preparation is evaluated by training the processed dataset on a **Logistic Regression model** (without Cost-function balancing), which gives a special metric of the data-based error matrix: **norma = accuracy x TP/FN** multiplied by the number of rows of the processed dataset (**len_df**). 
 *Note: the norma metric is taken for a specific data set because it is imbalanced on the target feature.*
 
 The results of the dataset preparation iterations are written to the file **"results/accuracy_prepare.csv"**. The best data set ready for training is saved to the file **"results/data.csv"**
