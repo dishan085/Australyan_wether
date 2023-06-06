@@ -1,0 +1,79 @@
+INFO:TUNING MODELS...
+INFO:LogisticRegression() best score: 0.7645542099786448 best params: {'C': 0.5, 'class_weight': 'balanced', 'max_iter': 300}
+INFO:KNeighborsClassifier() best score: 0.902698918644192 best params: {'metric': 'manhattan', 'n_neighbors': 5, 'weights': 'distance'}
+INFO:RandomForestClassifier() best score: 0.9162173196441635 best params: {'criterion': 'entropy', 'n_estimators': 150}
+INFO:DecisionTreeClassifier() best score: 0.8415368341159765 best params: {'max_depth': 100, 'max_leaf_nodes': 1600, 'min_samples_leaf': 3}
+INFO:EVALUATION: 
+
+INFO:log_reg: 
+
+INFO:Accuracy: 0.769471931027726
+INFO:Precision: 0.38945362134688694
+INFO:Recall: 0.7398913699456849
+INFO:Confusion matrix: [[19884  5766]
+ [ 1293  3678]]
+INFO:Classification report:               precision    recall  f1-score   support
+
+           0       0.94      0.78      0.85     25650
+           1       0.39      0.74      0.51      4971
+
+    accuracy                           0.77     30621
+   macro avg       0.66      0.76      0.68     30621
+weighted avg       0.85      0.77      0.79     30621
+
+INFO:F1 score: 0.5103017689906347
+INFO:ROC AUC score: 0.8344516637040644
+INFO:knn: 
+
+INFO:Accuracy: 0.7687534698409588
+INFO:Precision: 0.36749560411956794
+INFO:Recall: 0.5886139609736472
+INFO:Confusion matrix: [[20614  5036]
+ [ 2045  2926]]
+INFO:Classification report:               precision    recall  f1-score   support
+
+           0       0.91      0.80      0.85     25650
+           1       0.37      0.59      0.45      4971
+
+    accuracy                           0.77     30621
+   macro avg       0.64      0.70      0.65     30621
+weighted avg       0.82      0.77      0.79     30621
+
+INFO:F1 score: 0.4524858888115673
+INFO:ROC AUC score: 0.7616806091314028
+INFO:random_forest: 
+
+INFO:Accuracy: 0.8627085986741125
+INFO:Precision: 0.5798791918350343
+INFO:Recall: 0.56004828002414
+INFO:Confusion matrix: [[23633  2017]
+ [ 2187  2784]]
+INFO:Classification report:               precision    recall  f1-score   support
+
+           0       0.92      0.92      0.92     25650
+           1       0.58      0.56      0.57      4971
+
+    accuracy                           0.86     30621
+   macro avg       0.75      0.74      0.74     30621
+weighted avg       0.86      0.86      0.86     30621
+
+INFO:F1 score: 0.5697912402783463
+INFO:ROC AUC score: 0.8656286696759332
+INFO:tree: 
+
+INFO:Accuracy: 0.8315535090297508
+INFO:Precision: 0.48095335098798125
+INFO:Recall: 0.4749547374773687
+INFO:Confusion matrix: [[23102  2548]
+ [ 2610  2361]]
+INFO:Classification report:               precision    recall  f1-score   support
+
+           0       0.90      0.90      0.90     25650
+           1       0.48      0.47      0.48      4971
+
+    accuracy                           0.83     30621
+   macro avg       0.69      0.69      0.69     30621
+weighted avg       0.83      0.83      0.83     30621
+
+INFO:F1 score: 0.47793522267206484
+INFO:ROC AUC score: 0.795060583352254
