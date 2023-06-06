@@ -11,14 +11,17 @@ import seaborn as sns
 from matplotlib import pyplot as plt
 
 import os
+import joblib
 
 import category_encoders as ce
 from imblearn.over_sampling import SMOTE
 
 from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import precision_score, recall_score, accuracy_score, confusion_matrix, \
     roc_auc_score, f1_score, classification_report
@@ -61,27 +64,29 @@ def tune_models(x_train_inc, y_train_inc):
     :param  y_train_inc: train data  - target 
     :return:   dictionary of best estimators
     """
-    
-    #models = {"log_reg": LogisticRegression()}
-    models = {"random_forest" : RandomForestClassifier()}
-    #models = {"log_reg": LogisticRegression(), "knn": KNeighborsClassifier(),
-              #"random_forest" : RandomForestClassifier()}
-    #models = {"knn": KNeighborsClassifier(),
-              #"random.forest" : RandomForestClassifier()}    
-    best_estimators = {} 
+
+    # models = {"svm": SVC()}
+    models = {"log_reg": LogisticRegression(), "knn": KNeighborsClassifier(),
+              "random_forest": RandomForestClassifier(),
+              "tree": DecisionTreeClassifier()}
+
+    best_estimators = {}
+    best_params = {}
     logging.info("TUNING MODELS...") 
     for estimator_name, estimator in models.items():
         clf = GridSearchCV(estimator=estimator, param_grid=config.get(estimator_name),
-                 scoring="accuracy", cv=10)
+                 scoring="f1", cv=10)
         clf.fit(x_train_inc, y_train_inc)
         best_score = clf.best_score_
         best_estimators[estimator_name] = clf.best_estimator_
-        logging.info("{} best score: {}".format(estimator, best_score)) 
+        best_params = clf.best_params_
+        print(estimator_name, " model tuned.")
+        logging.info("{} best score: {} best params: {}".format(estimator, best_score, best_params))
     print("Models tuned.") 
-    return best_estimators
+    return best_estimators, best_params
 
 
-def evaluate_models(estimators, x_train_or, x_test_or, y_train_or, y_test_or):
+def evaluate_models(estimators, params, x_train_or, x_test_or, y_train_or, y_test_or):
     """
     Retrain best estimators and evaluate them
     :param estimators: dictionary of estimators
@@ -92,14 +97,27 @@ def evaluate_models(estimators, x_train_or, x_test_or, y_train_or, y_test_or):
     :return:
     """
     evaluation_data = {}
+    norma = -1
+
     logging.info("EVALUATION: \n")
     for model_name, estimator in estimators.items():
         estimator.fit(x_train_or, y_train_or)
         predict = estimator.predict(x_test_or)
         predict_probability = estimator.predict_proba(x_test_or)[:, 1]
-        
-        logging.info("{}: \n".format(model_name))
+        tn, fp, fn, tp = confusion_matrix(y_test_or, predict).ravel()
         accuracy = accuracy_score(y_test_or, predict)
+        norma1 = tp / fn * accuracy
+
+        filename = 'results/{}_model.sav'.format(model_name)
+        joblib.dump(estimator, filename)
+
+        if norma1 > norma:
+            # save the model to disk
+            filename = 'results/finalized_model.sav'
+            joblib.dump(estimator, filename)
+            norma = norma1
+
+        logging.info("{}: \n".format(model_name))
         precision = precision_score(y_test_or, predict)
         recall = recall_score(y_test_or, predict)
         cm = confusion_matrix(y_test_or, predict)
@@ -112,8 +130,8 @@ def evaluate_models(estimators, x_train_or, x_test_or, y_train_or, y_test_or):
         logging.info("Confusion matrix: {}".format(cm))
         logging.info("Classification report: {}".format(cr))
         logging.info("F1 score: {}".format(f1))
-        logging.info("RIC AUC score: {}".format(roc_auc))
-        evaluation_data[model_name] = [accuracy, f1, roc_auc]
+        logging.info("ROC AUC score: {}".format(roc_auc))
+        evaluation_data[model_name] = [accuracy, f1, roc_auc, norma1]
         
         fig = plt.figure(figsize=(5, 5))
         sns.heatmap(cm, cmap='Blues', annot=True, fmt='d', linewidths=5, cbar=False,
@@ -121,7 +139,7 @@ def evaluate_models(estimators, x_train_or, x_test_or, y_train_or, y_test_or):
         fig.savefig("results/{}_confusion_matrix.png".format(model_name))
     
     df_evaluation = pd.DataFrame.from_dict(evaluation_data, orient='index', 
-                                          columns=['accuraccy', 'f1_score', 'roc_auc_score'])
+                                          columns=['accuraccy', 'f1_score', 'roc_auc_score', 'norma'])
     df_evaluation.to_csv("results/evaluation.csv")       
         
     return
@@ -134,15 +152,15 @@ with open("configs/config.yaml", "r") as f:
 
 logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO, filename="results/logfile")
 
-# Запуск файла обробки дата-сету
-#files = ['prepare_dataset.py']  # файлы, которые нужно запустить
-#for file in files:
+# Running the dataset processing file
+# files = ['prepare_dataset.py']
+# for file in files:
     #subprocess.Popen(args=["start", "python", file], shell=True, stdout=subprocess.PIPE)
 
 df = load_data(config.get("csv"))
 
 x_train, x_test, y_train, y_test = smote_split(df)
 
-best_models = tune_models(x_train, y_train)
+best_models, paramsbest = tune_models(x_train, y_train)
 
-evaluate_models(best_models, x_train, x_test, y_train, y_test)
+evaluate_models(best_models, paramsbest,  x_train, x_test, y_train, y_test)

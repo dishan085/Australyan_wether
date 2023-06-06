@@ -243,7 +243,7 @@ def categ_data_mode(df_prm):
             
     df_prm[miss_cat] = df_prm[miss_cat].astype(str)
     
-    if config.get("missing_cat") == "mode":
+    if config.get("missing_cat") == "mode" and miss_cat != []:
         #  replaces null categorical values with Mode
         for val in miss_cat:
             with warnings.catch_warnings():
@@ -251,7 +251,7 @@ def categ_data_mode(df_prm):
                 ser_1 = df_prm.groupby(["Location", "Year", "Month"])[val].transform(lambda x: x.fillna(get_mode))
                 df_prm[val] = ser_1.values
 
-    df_prm = df_prm[~df_prm[miss_cat].isnull().all(axis=1)]  # deletes categorical data rows where all values
+        df_prm = df_prm[~df_prm[miss_cat].isnull().all(axis=1)]  # deletes categorical data rows where all values
     # are missing at the same time
     print("Null categorical values have replaced with monthly mode.")
     return df_prm       
@@ -285,7 +285,7 @@ def keyword_dic(inp_df, inp_df_copy):
     columns_3 = inp_df.loc[:, (inp_df.dtypes != 'float64') & (~inp_df.columns.isin(config.get("bool_type_columns")))]\
         .columns.tolist()
     for val in columns_3:    
-        name_dict = "key_dict_" + val
+        name_dict = val
         key_dict = dict(zip(inp_df[val].unique(), inp_df_copy[val].unique()))    
         key_info[name_dict] = key_dict    
     # print(key_info)
@@ -293,38 +293,53 @@ def keyword_dic(inp_df, inp_df_copy):
     return key_info
 
 
-def make_json_keys(inc_key_info):   
+def make_txt_keys(inc_key_info):   
     """
-    Function that writing keys for decoding categorical columns to a JSON file
-    # Функція, що записує ключі для декодування категорійних стовпців у JSON-файл # 
-    :param inc_key_info: DataFrame with dictionary for decoding categorical columns    
+    Function that writing keys for decoding categorical columns to a txt file
+    # Функція, що записує ключі для декодування категорійних стовпців у txt-файл #
+    :param inc_key_info: dictionary for decoding categorical columns
     :return: None
     """
-    df2 = pd.DataFrame(inc_key_info)
 
-    # Converting a DataFrame to a dictionary
-    # Перетворення DataFrame в словник
-    data = df2.to_dict(orient="records")
-
-    # Writing a dictionary to a JSON file
-    # Запис словника в JSON файл
+    # Writing a dictionary to a TXT file
+    # Запис словника в TXT файл
     
     # Checking the existence of the "results" directory
     # Перевірка існування директорії "results"
     if not os.path.exists("results"):
         os.makedirs("results")
 
-    # Checking the existence of the file "inc_key_info.json"
-    # Перевірка існування файлу "inc_key_info.json"
-    if os.path.isfile("results/inc_key_info.json"):
-        # Writing a dictionary to a JSON file
-        # Запис словника в JSON файл
-        with open("results/inc_key_info.json", "w") as f:
-            json.dump(data, f)
+    # Checking the existence of the file "inc_key_info.txt"
+    # Перевірка існування файлу "inc_key_info.txt"
+    if os.path.isfile("results/inc_key_info.txt"):
+        # Writing a dictionary to a txt file
+        # Запис словника в txt файл
+        with open("results/key_info.txt", "w") as f:            
+            f.write(str(key_info))
     else:
-        with open("results/inc_key_info.json", "x") as f:
-            json.dump(data, f)
-    print("Keys to decode categorical columns to JSON file have just been written to 'results/inc_key_info.json'.")
+        with open("results/key_info.txt", "w") as f:            
+            f.write(str(key_info))
+    print("Keys to decode categorical columns to txt file have just been written to 'results/inc_key_info.json'.")
+    return
+
+
+def make_feautures_keys(list_col):
+    # Writing keys for decoding categorical columns to a TXT file
+
+    # Запис словника в TXT файл
+    # Перевірка існування директорії "results"
+    if not os.path.exists("results"):
+        os.makedirs("results")
+
+    # Перевірка існування файлу "key_info.txt"
+    if os.path.isfile("results/feautures.txt"):
+        # Запис словника в TXT файл
+        with open("results/feautures.txt", "w") as f:
+            f.write(str(list_col))
+    else:
+        with open("results/feautures.txt", "x") as f:
+            f.write(str(list_col))
+    print("Feautures list to TXT file have just been written to 'results/feautures.txt'.")
     return
 
 
@@ -547,7 +562,9 @@ print("-------------------------------------------------------------------------
       "---------------------------------------------------")
                     
 key_info = keyword_dic(df, df_copy)
-make_json_keys(key_info)
+make_txt_keys(key_info)
 df = df_copy
 make_df_csv(df)
+col_list = df.columns.tolist()
+make_feautures_keys(col_list)
 
