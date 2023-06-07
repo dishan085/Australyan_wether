@@ -2,7 +2,7 @@
 
 ## Problem Statement
 
-Preparing datasets before training prediction models is usually a semi-automated process that requires many iterations before obtaining a finished feature space. This project was developed by me to verify and test the automatic processing (the file **"rain_prediction.py"**) of the input raw data (**"weatherAUS.csv"**) according to the parameters specified in a separate file "config.yaml". The project also developed a code for training several forecasting models (**"main.py"**) and a code for automatic prediction using new input data (**"rain_prediction.py"**). 
+Preparing datasets before training prediction models is usually a semi-automated process that requires many iterations before obtaining a finished feature space. This project was developed by me to verify and test the automatic processing (the file **"prepare_dataset.py"**) of the input raw data (**"weatherAUS.csv"**) according to the parameters specified in a separate file **"config.yaml"**. The project also developed a code for training several forecasting models (**"main.py"**) and a code for automatic prediction using new input data (**"rain_prediction.py"**). 
 This project was developed on the basis of a dataset of weather observations in Australia. The dependent feature in these observations is the RainTomorrow feature, which takes the value **Yes/No**. This is a binary classification task.
 
 ## Preparing datasets
